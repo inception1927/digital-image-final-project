@@ -1,50 +1,50 @@
 clc;
 clear;
-global row;        %Í¼Æ¬ĞĞÊı£¬ 112
-global col;        %Í¼Æ¬ÁĞÊı£¬ 92
-global persons;    %ÈËÊı£¬ 40
-global k;          %Ñ¡È¡ÌØÕ÷ÏòÁ¿×î´óÎ¬Êı£¬ 80
+global row;       
+global col;       
+global persons;    
+global k;          
 row=112;
 col=92;
 persons=40;
 k = 80;
-pMatrix = readfile(0); %¶ÁÈëÑµÁ·ÓÃµÄÍ¼Æ¬£¬¾ØÕóÃ¿Ò»ĞĞ´ú±íÒ»ÕÅÍ¼Ïñ
-tMatrix = readfile(1); %¶ÁÈë²âÊÔÓÃµÄÍ¼Æ¬£¬¾ØÕóÃ¿Ò»ĞĞ´ú±íÒ»ÕÅÍ¼Ïñ
-pMeans = mean(pMatrix);   %ÇóÑµÁ·Í¼Æ¬Æ½¾ùÖµ
-tMeans = mean(tMatrix);   %Çó²âÊÔÍ¼Æ¬Æ½¾ùÖµ
+pMatrix = readfile(0); 
+tMatrix = readfile(1); 
+pMeans = mean(pMatrix);   
+tMeans = mean(tMatrix);   
 % m = reshape(pMeans, 112, 92);
-% imshow(uint8(m));   %¾ùÖµÁ³
-[pA, pV] = PCA(pMatrix, pMeans, 7);     %¶ÔÑµÁ·Í¼Æ¬×öPCA½µÎ¬
-[tA, tV] = PCA(pMatrix, tMeans, 3);     %¶Ô²âÊÔÍ¼Æ¬×öPCA½µÎ¬
+% imshow(uint8(m));  
+[pA, pV] = PCA(pMatrix, pMeans, 7); 
+[tA, tV] = PCA(pMatrix, tMeans, 3);     
 % m = reshape(tMatrix(1,:), 112, 92);   
-cnt = 0;                            %¼ÆËãÆ¥ÅäÕıÈ·µÄÊıÄ¿
+cnt = 0;                            
 for i = 1:120
-    minPos = 0;                     %Ã¿´ÎÑ¡È¡ĞÂµÄ²âÊÔÍ¼Æ¬Ê±¶¼ÖØÖÃ×î¶Ì¾àÀëµÄÑµÁ·ÏòÁ¿µÄÎ»ÖÃ
-    minDistance = realmax;          %Ã¿´ÎÑ¡È¡ĞÂµÄ²âÊÔÍ¼Æ¬Ê±¶¼ÖØÖÃ×îĞ¡Öµ£¬ ³õÊ¼ÖµÎªÏµÍ³¿ÉÈ¡µÄ×î´óÖµ
+    minPos = 0;                     
+    minDistance = realmax;          
     for j = 1:280
-        curDistance = calDistance(tMatrix(i,:), pMatrix(j,:));  %¼ÆËãÁ½¸öÍ¼Æ¬ÏòÁ¿¶ş·¶ÊıµÄº¯Êı
+        curDistance = calDistance(tMatrix(i,:), pMatrix(j,:));  
         if (curDistance < minDistance)            
-            minDistance = curDistance;          %µ±µ±Ç°¶ş·¶ÊıĞ¡ÓÚÖ®Ç°µÄ×îĞ¡ÖµÊ±£¬¸üĞÂ×îĞ¡Öµ
+            minDistance = curDistance;         
             minPos = j;
         end
     end
     t = reshape(tMatrix(i,:), 112, 92);
     p = reshape(pMatrix(minPos,:), 112, 92);
-    subplot(1,2,1);imshow(uint8(t));title('²âÊÔÍ¼Ïñ');
-    subplot(1,2,2);imshow(uint8(p));title('Æ¥ÅäÍ¼Ïñ');
-    str = 'F:\Æ¥Åä¶Ô±ÈÍ¼Ïñ\s';
+    subplot(1,2,1);imshow(uint8(t));title('');
+    subplot(1,2,2);imshow(uint8(p));title('');
+    str = 'F:\è®­ç»ƒå›¾åƒè·¯å¾„\s';
     str = strcat(str, num2str(floor((i-1)/3)+1));
     str = strcat(str, '-');
     str = strcat(str, num2str(rem(i-1,3)+1));
     str = strcat(str, '.png');
-    saveas(gcf,str);            %½«²âÊÔÓÃµÄÍ¼ÏñºÍÆäÆ¥ÅäÍ¼Ïñ×÷Îª¶Ô±È±£´æµ½Ó²ÅÌÖĞ
+    saveas(gcf,str);          
     
-    a = floor((minPos-1)/7);    %ÅĞ¶Ïµ±Ç°²âÊÔÍ¼Æ¬ºÍÆ¥Åäµ½µÄÑµÁ·Í¼Æ¬ÊÇ·ñÊÇÍ¬Ò»¸öÈË
-    b =  floor((i-1)/3);        %ÒòÎªÑµÁ·Í¼Æ¬ºÍ²âÊÔÍ¼Æ¬¶¼ÊÇ°´Ë³Ğò¶ÁÈ¡´æ´¢µÄ£¬·Ö±ğ
-    if (a == b)                 %Ã¿ÆßÕÅºÍÃ¿ÈıÕÅÊÇÍ¬Ò»¸öÈË£¬ËùÒÔ·Ö±ğ³ıÒÔ7ºÍ3ÏòÏÂÈ¡Õû
-        cnt = cnt + 1;          %Èç¹ûÏàµÈ¾ÍÒâÎ¶×Å²âÊÔÍ¼Æ¬Æ¥Åäµ½µÄÑµÁ·Í¼Æ¬ÊÇÍ¬Ò»¸öÈË
-    end                         %ÓÃcnt¼ÇÂ¼
-end                             %²âÊÔ½á¹ûÎª 114/120 = 95% µÄÊ¶±ğÂÊ
+    a = floor((minPos-1)/7);    
+    b =  floor((i-1)/3);        
+    if (a == b)                 
+        cnt = cnt + 1;          
+    end                         
+end                             
 rate = cnt/120;
-fprintf('ÕıÈ·ÂÊÎª%.2f%%',rate*100);
+fprintf('è¯†åˆ«ç‡%.2f%%',rate*100);
 
